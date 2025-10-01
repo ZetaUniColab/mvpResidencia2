@@ -1,20 +1,43 @@
 package com.example.demo.Logs;
 
-import com.example.demo.Entitys.Client;
+import com.example.demo.Logs.TransType;
+import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Date;
 
+@Getter
+@Entity
+@Table(name = "transaction_logs")
 public class TransactionLog {
+
+    // Getters and setters
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Primary key
+
     private int accountID;
     private int clientID;
+
+    @Enumerated(EnumType.STRING)
     private TransType type;
+
+    @Column(length = 1000)
     private String description;
+
     private double value;
+
+    @Temporal(TemporalType.DATE)
     private Date expectedDate;
+
     private String status;
-    TransactionLog(Client account, Client client, TransType type, String description, double value, Date expectedDate, String status){
-        this.accountID = account.getID();
-        this.clientID = client.getID();
+
+    public TransactionLog() {
+    }
+
+    public TransactionLog(int accountID, int clientID, TransType type, String description, double value, Date expectedDate, String status) {
+        this.accountID = accountID;
+        this.clientID = clientID;
         this.type = type;
         this.description = description;
         this.value = value;
@@ -22,56 +45,28 @@ public class TransactionLog {
         this.status = status;
     }
 
-    public int getAccountID() {
-        return accountID;
-    }
-
     public void setAccountID(int accountID) {
         this.accountID = accountID;
-    }
-
-    public int getClientID() {
-        return clientID;
     }
 
     public void setClientID(int clientID) {
         this.clientID = clientID;
     }
 
-    public TransType getType() {
-        return type;
-    }
-
     public void setType(TransType type) {
         this.type = type;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public double getValue() {
-        return value;
-    }
-
     public void setValue(double value) {
         this.value = value;
     }
 
-    public Date getExpectedDate() {
-        return expectedDate;
-    }
-
     public void setExpectedDate(Date expectedDate) {
         this.expectedDate = expectedDate;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public void setStatus(String status) {
