@@ -8,10 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-/**
- * Controlador REST para testar as conexões com a Omie.
- * Use o Postman para acessar os endpoints e ver o retorno da API.
- */
+
 @RestController
 @RequestMapping("/omie")
 public class OmieController {

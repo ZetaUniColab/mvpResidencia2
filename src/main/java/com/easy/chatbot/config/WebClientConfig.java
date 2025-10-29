@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
-    // API de movimentos financeiros (Contas a pagar/receber)
+
     @Bean
     public WebClient omieFinanceiroClient() {
         return WebClient.builder()
@@ -19,7 +19,6 @@ public class WebClientConfig {
                 .build();
     }
 
-    // API de categorias (usada para buscar nomes das categorias)
     @Bean
     public WebClient omieCategoriaClient() {
         return WebClient.builder()
