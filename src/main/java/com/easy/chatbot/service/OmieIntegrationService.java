@@ -6,10 +6,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-/**
- * Serviço responsável por se comunicar com as APIs da Omie.
- * Ele usa os dois WebClients configurados na classe WebClientConfig.
- */
 @Service
 public class OmieIntegrationService {
 
@@ -25,7 +21,7 @@ public class OmieIntegrationService {
         this.omieCategoriaClient = omieCategoriaClient;
     }
 
-    /** Chama a API de movimentos financeiros (contas a pagar/receber) */
+
     public Mono<String> listarMovimentos() {
         Map<String, Object> body = Map.of(
                 "call", "ListarMovimentos",
@@ -42,7 +38,7 @@ public class OmieIntegrationService {
                 .bodyToMono(String.class);
     }
 
-    /** Chama a API de categorias da Omie */
+
     public Mono<String> listarCategorias() {
         Map<String, Object> body = Map.of(
                 "call", "ListarCategorias",
@@ -59,7 +55,6 @@ public class OmieIntegrationService {
                 .bodyToMono(String.class);
     }
 
-    /** Faz as duas chamadas ao mesmo tempo (em paralelo) */
     public Mono<Map<String, String>> listarAmbas() {
         return Mono.zip(listarMovimentos(), listarCategorias())
                 .map(tuple -> Map.of(
