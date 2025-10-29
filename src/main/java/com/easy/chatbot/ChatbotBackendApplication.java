@@ -1,4 +1,4 @@
-package com.easy.chatbot.chatbot_backend;
+package com.easy.chatbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
