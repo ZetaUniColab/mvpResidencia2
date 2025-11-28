@@ -1,5 +1,6 @@
 package com.easy.chatbot.service;
 
+import io.github.cdimascio.dotenv.Dotenv;// Importe a lib
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -12,15 +13,28 @@ public class OmieIntegrationService {
     private final WebClient omieFinanceiroClient;
     private final WebClient omieCategoriaClient;
 
-    private final String appKey = "5614700718627";
-    private final String appSecret = "2ae8328ce879960d99ba83e7986805a3";
+    // Removemos os valores fixos, agora são apenas declarados
+    private final String appKey;
+    private final String appSecret;
 
     public OmieIntegrationService(WebClient omieFinanceiroClient,
                                   WebClient omieCategoriaClient) {
         this.omieFinanceiroClient = omieFinanceiroClient;
         this.omieCategoriaClient = omieCategoriaClient;
-    }
 
+        // Carrega as variáveis do arquivo .env
+        // O parametro ignoreIfMissing(true) evita erro se o arquivo não existir (útil em produção se usar variáveis de ambiente do sistema)
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+        // Pega os valores. Se não achar no .env, tenta pegar das variáveis de sistema (bom para deploy)
+        this.appKey = dotenv.get("OMIE_APP_KEY");
+        this.appSecret = dotenv.get("OMIE_APP_SECRET");
+
+        // Verificação de segurança simples (opcional)
+        if (this.appKey == null || this.appSecret == null) {
+            throw new RuntimeException("ERRO: As chaves da API Omie não foram encontradas no .env");
+        }
+    }
 
     public Mono<String> listarMovimentos() {
         Map<String, Object> body = Map.of(
@@ -37,7 +51,6 @@ public class OmieIntegrationService {
                 .retrieve()
                 .bodyToMono(String.class);
     }
-
 
     public Mono<String> listarCategorias() {
         Map<String, Object> body = Map.of(
