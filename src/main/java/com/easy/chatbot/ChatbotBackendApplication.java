@@ -2,6 +2,8 @@ package com.easy.chatbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class ChatbotBackendApplication {
@@ -10,4 +12,8 @@ public class ChatbotBackendApplication {
 		SpringApplication.run(ChatbotBackendApplication.class, args);
 	}
 
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
