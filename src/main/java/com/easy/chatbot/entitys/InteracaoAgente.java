@@ -9,9 +9,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 /**
- * Entidade JPA responsável pelo registro de auditoria e histórico de interações.
+ * Entidade JPA responsável pelo registro do histórico de msg.
  * Esta classe mapeia a tabela que armazena os logs de conversas ou sessões realizadas
- * entre o Cliente e o Agente Virtual (Bot), permitindo análises futuras de atendimento.
+ * entre o Cliente e o bot permitindo análises futuras de atendimento.
  */
 @Entity
 @Getter
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class InteracaoAgente {
 
     /**
-     * Identificador único da sessão de interação (Primary Key).
+     * Identificador único da srimary Key.
      * Gerado automaticamente pela estratégia de identidade do banco de dados.
      */
     @Id
@@ -30,11 +30,11 @@ public class InteracaoAgente {
 
     /**
      * Referência ao Cliente que iniciou a interação.
-     * Mapeia a chave estrangeira 'id_cliente'.
+     * Mapeia a chave estrangeira id_cliente'.
      *
-     * Nota Arquitetural: A anotação @OneToOne indica um relacionamento 1:1.
+     * a anotação @OneToOne indica um relacionamento 1 pra 1.
      * Em um cenário de produção onde um cliente possui múltiplos históricos,
-     * a modelagem ideal seria @ManyToOne. Mantido conforme especificação do MVP.
+     * a modelagem ideal seria @ManyToOne. pq seriam vário e n só 1
      */
     @OneToOne
     @JoinColumn(name = "id_cliente")
@@ -56,7 +56,7 @@ public class InteracaoAgente {
 
     /**
      * Timestamp de finalização da sessão.
-     * Utilizado em conjunto com data_inicio para determinar o SLA do atendimento.
+     * Utilizado em conjunto com data_inicio para determinar o sla do atendimento.
      */
     @Column
     private LocalDate data_termino;

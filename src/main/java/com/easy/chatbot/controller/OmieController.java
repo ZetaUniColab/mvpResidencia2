@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 
 /**
- * Controlador auxiliar para exposição direta dos dados da Omie.
- * Utilizado primariamente para debug e verificação dos dados brutos da API financeira.
+ * Controlador pra mostar diretamente os dados da omie.
+ * Utilizado + para debug e verificação dos dados brutos da API financeira.
  */
 @RestController
 @RequestMapping("/omie")

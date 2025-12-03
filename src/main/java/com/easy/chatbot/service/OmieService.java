@@ -14,8 +14,7 @@ import java.util.*;
 /**
  * Serviço responsável pela lógica de negócios financeira e integração com o ERP Omie.
  * Gerencia a obtenção, processamento e formatação dos dados financeiros para apresentação ao usuário.
- * * Nota: Atualmente implementa mocks (simulações) para garantir estabilidade em demonstrações.
- */
+ * * tem simulações para dx mais real.*/
 @Service
 public class OmieService {
 
@@ -30,7 +29,7 @@ public class OmieService {
 
     private final RestTemplate restTemplate;
 
-    // Mapa estático para tradução de códigos de categoria contábil para descrições amigáveis
+    // Mapa estático para tradução de códigos do que a empresa pediu pra mostar
     private static final Map<String, String> MAPA_CODIGO_GERENCIAL = new LinkedHashMap<>();
     static {
         MAPA_CODIGO_GERENCIAL.put("1.0", "Receitas Operacionais");
@@ -46,15 +45,15 @@ public class OmieService {
 
     /**
      * Gera e envia um relatório de faturas pendentes.
-     * Utiliza dados simulados para garantir retorno visual consistente.
+     * simula dados para n ficar tudo 0
      *
-     * @param to Número de destino (WhatsApp).
-     * @param whatsAppService Serviço de mensageria para envio da resposta.
+     * @param to Número de destino
+     * @param whatsAppService Serviço de mensag para envio da resposta
      */
     public void handleFaturasPendentes(String to, WhatsappService whatsAppService) {
         whatsAppService.sendTextMessage(to, "🔍 Consultando faturas em aberto...");
 
-        // Simulação de latência de rede
+        // Simula latência de rede pra n mandar tudo na msm hr e ficar mais bonitinho e o cliente entender melhor o que vem primeiro e etc(pensei nisso graças a minha internet ruim em um bagulho kkkkkk)
         try { Thread.sleep(1000); } catch (InterruptedException e) {}
 
         StringBuilder relatorio = new StringBuilder();
@@ -67,21 +66,21 @@ public class OmieService {
     }
 
     /**
-     * Processa a solicitação de resumo financeiro baseada em um intervalo de datas.
-     * Calcula a diferença de dias e gera valores proporcionais para o relatório.
+     * Processa a solicitação de resumo financeiro baseada em um intervalo de datas
+     * Calcula a diferença de dias e gera valores proporcionais para o relatório
      *
-     * @param to Número de destino.
-     * @param inicio Data inicial do período.
-     * @param fim Data final do período.
-     * @param whatsAppService Serviço de mensageria.
+     * @param to Número de destino
+     * @param inicio Data inicial do perído.
+     * @param fim Data final do período
+     * @param whatsAppService Serviço de msg
      */
     public void handleResumoPorPeriodo(String to, LocalDate inicio, LocalDate fim, WhatsappService whatsAppService) {
         long dias = ChronoUnit.DAYS.between(inicio, fim);
-        if (dias == 0) dias = 1; // Previne inconsistência matemática em intervalos de mesmo dia
+        if (dias == 0) dias = 1; // Previne uns erros chatos
 
         whatsAppService.sendTextMessage(to, "⏳ Gerando relatório de " + inicio.format(DateTimeFormatter.ofPattern("dd/MM")) + " a " + fim.format(DateTimeFormatter.ofPattern("dd/MM")) + "...");
 
-        // Obtém dados simulados baseados na amplitude do período
+        // Obtém dados simulados baseados no tempo  pedido
         Map<String, Double> resultados = gerarRelatorioMock((int) dias);
 
         double totalReceitas = 0;
@@ -89,7 +88,7 @@ public class OmieService {
         StringBuilder detalhes = new StringBuilder();
         NumberFormat formatador = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
-        // Processamento de totais e formatação de linhas
+        // Processa totais e formatação de linhas
         for (Map.Entry<String, Double> entry : resultados.entrySet()) {
             double valor = entry.getValue();
             String codigo = entry.getKey();
@@ -99,7 +98,7 @@ public class OmieService {
                 detalhes.append("- ").append(descricao).append(": *").append(formatador.format(valor)).append("*\n");
             }
 
-            // Classificação básica: Códigos iniciados em 1 ou 6 são Receitas, demais são Despesas
+            //  Códigos iniciados em 1 ou 6 são Receitas os outros demais são Despesas
             if (codigo.startsWith("1.") || codigo.startsWith("6.")) {
                 totalReceitas += valor;
             } else {
@@ -125,7 +124,7 @@ public class OmieService {
     }
 
     /**
-     * Wrapper para facilitar chamadas com períodos pré-definidos (ex: 15 ou 30 dias).
+     * Wrapper para facilitar chamadas com períodos pré-definidos (15 ou 30).
      */
     public void handleResumoRequest(String to, int dias, WhatsappService whatsAppService) {
         LocalDate fim = LocalDate.now();
@@ -134,8 +133,8 @@ public class OmieService {
     }
 
     /**
-     * Gera dados financeiros simulados.
-     * Utiliza a quantidade de dias como fator multiplicador para garantir verossimilhança nos valores.
+     *simula numeros ficticios pra usar.
+     * Utiliza a quantidade de dias como  multiplicador pra deixar mais real.
      *
      * @param dias Quantidade de dias do período para cálculo proporcional.
      * @return Mapa contendo código da categoria e valor calculado.
@@ -153,7 +152,7 @@ public class OmieService {
         return dados;
     }
 
-    // Métodos stubs para manter compatibilidade de compilação com chamadas legadas
+    // Métodos stubs para manter a compatibilidade de compilação com chamadas legadas
     public List<Movimento> buscarMovimentosPaginado() { return new ArrayList<>(); }
     public List<Categoria> buscarCategoriasPaginado() { return new ArrayList<>(); }
     public reactor.core.publisher.Mono<String> listarMovimentos() { return reactor.core.publisher.Mono.empty(); }

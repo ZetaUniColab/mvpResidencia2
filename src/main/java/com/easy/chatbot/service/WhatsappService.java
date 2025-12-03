@@ -18,12 +18,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 /**
- * Serviço central de mensageria.
- * Responsável por:
- * 1. Processar webhooks recebidos do WhatsApp.
- * 2. Gerenciar fluxo de autenticação e sessão do usuário.
- * 3. Orquestrar a navegação entre menus.
- * 4. Disparar mensagens de resposta via API do Facebook.
+ * Serviço central de msg:
+ * 1- Processa webhooks recebidos do WhatsApp.
+ * 2 - Gerencia fluxo de autenticação e sessão do usuário.
+ * 3- Controla a navegação entre menus.
+ * 4- Dispara mensagens de resposta via API do Facebook.
  */
 @Service
 public class WhatsappService {
@@ -68,8 +67,8 @@ public class WhatsappService {
     }
 
     /**
-     * Constrói e envia o Menu Principal utilizando botões interativos.
-     * Melhora a UX permitindo resposta rápida com um clique.
+     * constrói e envia o Menu Principal utilizando botões interativos.
+     * melhora a UX permitindo resposta rápida com um clique.
      */
     public void sendMainMenu(String to) {
         try {
@@ -100,8 +99,7 @@ public class WhatsappService {
     }
 
     /**
-     * Constrói e envia o Submenu de seleção de período utilizando lista interativa.
-     * Recomendado para cenários com mais de 3 opções.
+     * Constrói e manda o Submenu de seleção de período utilizando lista interativa.
      */
     public void sendResumoSubMenu(String to) {
         try {
@@ -148,13 +146,13 @@ public class WhatsappService {
 
     /**
      * Método principal de processamento.
-     * Analisa o payload do webhook, normaliza dados, verifica autenticação e roteia para a ação correta.
+     * analisa o payload do webhook, normaliza dados, verifica autenticação e roteia para a ação correta.
      */
     public void processMessage(JsonNode messageData) {
         String from = messageData.get("from").asText();
         String type = messageData.get("type").asText();
 
-        // Normalização de número (Brasil): Insere o 9º dígito se o formato for DDI+DDD+8dígitos (ex: 55+11+88887777)
+        // ajeita o numero pro formato br,  insere o 9º dígito se o formato for DDI+DDD+8dígitos (ex: 55+11+88887777)
         if (from.startsWith("55") && from.length() == 12) {
             from = from.substring(0, 4) + "9" + from.substring(4);
         }
@@ -162,7 +160,7 @@ public class WhatsappService {
         if ("text".equals(type)) {
             String textBody = messageData.path("text").path("body").asText().trim();
 
-            // Comando administrativo para reset de sessão (Demo)
+            // comando administrativo para reset de sessão (só para poder ficar testando se ta funfanfo, pode apagar e funciona deboa)
             if ("/reset".equalsIgnoreCase(textBody)) {
                 Optional<Cliente> cli = clienteRepository.findByWhatsapp(from);
                 if (cli.isPresent()) {
@@ -174,7 +172,7 @@ public class WhatsappService {
                 return;
             }
 
-            // Detecção de formato de data para relatório personalizado
+            // validação formato de data para relatório personalizado
             if (textBody.matches("\\d{2}/\\d{2}/\\d{4}")) {
                 try {
                     LocalDate dataInicio = LocalDate.parse(textBody, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -191,13 +189,13 @@ public class WhatsappService {
                 return;
             }
 
-            // Fluxo padrão: verifica autenticação antes de mostrar o menu
+            // verifica autenticação antes de mostrar o menu
             if (verificarAutenticacao(from, textBody)) {
                 sendMainMenu(from);
             }
 
         } else if ("interactive".equals(type)) {
-            // Processamento de resposta a botões ou listas
+            // processamento de resposta a botões ou listas
             JsonNode interactive = messageData.path("interactive");
             String subType = interactive.path("type").asText();
             String id = "";
@@ -215,7 +213,7 @@ public class WhatsappService {
     /**
      * Valida a sessão do usuário.
      * - Se existir e for válida: Permite acesso.
-     * - Se não: Solicita CPF para autenticação.
+     * - Se n tiver Solicita CPF para autenticação.
      *
      * @return true se autenticado, false se bloqueado.
      */
@@ -230,12 +228,12 @@ public class WhatsappService {
             cliente = clienteOpt.get();
         }
 
-        // Validação do token de 24h
+        // a validação do token de 24h
         if (cliente.getDataValidadeToken() != null && cliente.getDataValidadeToken().isAfter(LocalDateTime.now())) {
             return true;
         }
 
-        // Tentativa de login: Valida formato simples de CPF (apenas números, 11 dígitos)
+        // aq valida formato simples d CPF (apenas números e 11 dígitos)
         String apenasNumeros = textoRecebido.replaceAll("\\D", "");
         if (apenasNumeros.length() == 11) {
             cliente.setCpf(apenasNumeros);
@@ -248,10 +246,8 @@ public class WhatsappService {
             return false;
         }
     }
+     /* Roteador central de comandos do menu de esolhas.*/
 
-    /**
-     * Roteador central de comandos do menu interativo.
-     */
     private void handleMenuOption(String to, String optionId) {
         switch (optionId) {
             case "menu_resumo":

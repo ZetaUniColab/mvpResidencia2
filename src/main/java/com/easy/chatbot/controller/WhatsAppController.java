@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Controlador principal para integração com o WhatsApp Business API.
- * Gerencia a validação do webhook (handshake) e o recebimento de eventos (mensagens).
+ * Gerencia a validação do webhoo e o recebimento de emsg.
  */
 @RestController
 @RequestMapping("/whatsapp")
@@ -27,10 +27,7 @@ public class WhatsAppController {
     @Value("${whatsapp.verify-token}")
     private String verifyToken;
 
-    /**
-     * Endpoint utilitário para disparo manual de mensagens.
-     * Útil para testes de integração sem necessidade de interação via aparelho celular.
-     */
+    /* Endpoint para testes manuais*/
     @PostMapping("/send")
     @Operation(
             summary = "Teste de Envio Manual",
@@ -42,7 +39,7 @@ public class WhatsAppController {
             @ApiResponse(responseCode = "500", description = "Erro na comunicação com o Facebook (Token vencido ou ID errado)")
     })
     public String sendMessage() {
-        String numeroDestino = "5579988482109"; // Hardcoded para debug
+        String numeroDestino = "5579988482109";
         service.sendMainMenu(numeroDestino);
         return "Menu enviado para teste.";
     }
@@ -72,11 +69,9 @@ public class WhatsAppController {
         }
     }
 
-    /**
-     * Recebimento de Eventos (POST).
+     /*Recebimento de POST
      * Endpoint onde o Facebook entrega as notificações de mensagens recebidas.
-     * Processa o JSON para extrair o conteúdo relevante e delega para o Service.
-     */
+     * Processa o JSON para extrair o conteúdo relevante e delega para o Service.*/
     @PostMapping("/webhook")
     @Operation(summary = "Recebimento de Mensagens", description = "Aqui é onde o Facebook entrega as mensagens que os clientes mandam no Zap.")
     @ApiResponses(value = {
@@ -85,7 +80,7 @@ public class WhatsAppController {
     })
     public ResponseEntity<Void> receiveWebhook(@RequestBody JsonNode body) {
         try {
-            // Navegação defensiva no JSON para garantir que é um evento de mensagem válido
+            // Navegação defensiva no JSON para ter ctz que é valido
             if (body.has("object") && "whatsapp_business_account".equals(body.get("object").asText())) {
                 JsonNode changes = body.path("entry").get(0).path("changes").get(0);
                 JsonNode value = changes.path("value");
@@ -98,7 +93,7 @@ public class WhatsAppController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Retorno mandatório de 200 OK para confirmar o recebimento ao Facebook
+        // Retoorna 200 e ok para confirmar o recebimento pro Facebook
         return ResponseEntity.ok().build();
     }
 }

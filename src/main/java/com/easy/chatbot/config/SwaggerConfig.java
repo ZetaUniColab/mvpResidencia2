@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * Configuração personalizada para o OpenAPI (Swagger UI).
+ * Configuração personalizada para o swager UI.
  * Define metadados da API, servidores de destino e informações de contato
  * para facilitar o consumo e teste dos endpoints por desenvolvedores.
  */
@@ -21,7 +21,7 @@ public class SwaggerConfig {
 
     /**
      * Constrói o objeto OpenAPI com as definições do projeto.
-     * Inclui configurações de ambiente (Dev/Prod) e informações detalhadas sobre a API.
+     * Inclui configurações de ambiente e informações detalhadas sobre a API.
      *
      * @return Objeto OpenAPI configurado.
      */
@@ -49,10 +49,9 @@ public class SwaggerConfig {
                         .url("https://developer.omie.com.br"));
     }
 
-    /**
-     * Gera a descrição da API utilizando Text Blocks para formatação Markdown.
-     *
-     * @return String contendo a descrição formatada.
+    /*
+            * Gera a descrição da API utilizando Text Blocks para formatação Markdown.
+     * @return String com a descrição formatada.
      */
     private String descricaoDetalhada() {
         return """

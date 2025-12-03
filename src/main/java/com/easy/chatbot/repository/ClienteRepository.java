@@ -6,18 +6,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Repositório para acesso a dados da entidade Cliente.
+ * Repositório para acesso a dados da entidade Cliente
  * Estende JpaRepository para herdar operações CRUD padrão e suporte a paginação.
  */
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     /**
-     * Consulta derivada (Derived Query Method) para localizar um cliente pelo número de WhatsApp.
+     * Consulta derivada (Derived Query Method) para avhar um cliente pelo número de WhatsApp.
      * O Spring Data JPA gera a query SQL automaticamente baseada na assinatura do método.
      *
      * @param whatsapp Número de telefone do cliente.
-     * @return Optional contendo o cliente, se encontrado.
+     * @return Optional ccom o cliente, se encontrado.
      */
     Optional<Cliente> findByWhatsapp(String whatsapp);
 }

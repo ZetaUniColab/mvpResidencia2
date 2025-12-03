@@ -33,10 +33,7 @@ public class Cliente {
     @Column(length = 11)
     private String cpf;
 
-    /**
-     * Armazena o timestamp de expiração do token de sessão.
-     * Utilizado para validar se o usuário precisa realizar nova autenticação via CPF.
-     */
+    /* Armazena o timestamp de expiração do token de sessão*/
     @Column(name = "data_validade_token")
     private LocalDateTime dataValidadeToken;
 

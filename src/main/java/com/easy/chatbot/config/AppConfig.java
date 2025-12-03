@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Classe de configuração global para definição de Beans do Spring.
- * Centraliza a instanciação de objetos que serão injetados em outros componentes via Autowired.
+ * Classe de configuração global pra definir os  Beans do Spring.
+ * Centraliza a instanciação de objetos que vai ser injetados em outros componentes via Autowired.
  */
 @Configuration
 public class AppConfig {
