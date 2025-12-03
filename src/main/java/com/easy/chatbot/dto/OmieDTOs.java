@@ -16,7 +16,7 @@ public class OmieDTOs {
 
     /**
      * Estrutura padrão para envio de requisições POST à API da Omie.
-     * A Omie utiliza um padrão RPC onde o método é definido no corpo do JSON (parâmetro 'call').
+     * A Omie utiliza um padrão RPC e define no corpo do JSON (parâmetro 'call').
      */
     @Data
     public static class OmieRequest {
@@ -40,7 +40,7 @@ public class OmieDTOs {
 
             Map<String, Object> p = new HashMap<>();
 
-            // Tratamento de inconsistência da API Omie: 'pagina' para categorias, 'nPagina' para movimentos
+            // Tratamento de errinhops da API Omie: 'pagina' para categorias, 'nPagina'' para movimentos
             if ("ListarCategorias".equals(call)) {
                 p.put("pagina", pag);
                 p.put("registros_por_pagina", 500); // Maximizando o batch size para eficiência
@@ -55,7 +55,7 @@ public class OmieDTOs {
     // --- DTOs de Resposta ---
 
     /**
-     * Mapeia a resposta da listagem de categorias.
+     * Mapeia a resposta da lista de categorias.
      */
     @Data
     public static class OmieCategoriaResponse {
@@ -64,7 +64,7 @@ public class OmieDTOs {
     }
 
     /**
-     * Mapeia a resposta da listagem de movimentos financeiros.
+     * Mapeia a resposta da lista de movimentos financeiros.
      */
     @Data
     public static class OmieMovimentoResponse {
@@ -87,7 +87,7 @@ public class OmieDTOs {
     }
 
     /**
-     * Representação de um Movimento Financeiro (Título).
+     * Representação de um Movimento Financeiro (o título).
      */
     @Data
     public static class Movimento {
